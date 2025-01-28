@@ -1,14 +1,14 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.jetbrains.kotlin.jvm' version '2.1.0'
+    id 'org.jetbrains.kotlin.jvm' version '2.1.10'
     id 'org.javamodularity.moduleplugin' version '1.8.15'
     id 'org.openjfx.javafxplugin' version '0.1.0'
-    id 'org.beryx.jlink' version '2.25.0'
+    id 'org.beryx.jlink' version '3.1.1'
     id 'org.jetbrains.kotlin.plugin.serialization' version '2.1.0'
 }
 
-group 'org.example'
+group 'org.emes'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -20,8 +20,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'org.example.demo'
-    mainClass = 'org.example.demo.HelloApplication'
+    mainModule = 'org.emes.todo'
+    mainClass = 'org.emes.todo.HelloApplication'
 }
 kotlin {
     jvmToolchain(23)
@@ -36,7 +36,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
-    implementation ("io.github.mkpaz:atlantafx-base:2.0.1")
+    implementation("io.github.mkpaz:atlantafx-base:2.0.1")
 }
 
 test {
