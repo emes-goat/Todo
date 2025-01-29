@@ -1,7 +1,7 @@
 package org.emes.todo.io
 
 import kotlinx.serialization.json.Json
-import org.emes.todo.Todo
+import org.emes.todo.Task
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.SecureRandom
@@ -25,8 +25,8 @@ class EncryptedIO {
         private val FILE_CHARSET = Charsets.UTF_8
     }
 
-    fun write(filePath: Path, password: CharArray, todos: List<Todo>) {
-        val json = Json.encodeToString(todos)
+    fun write(filePath: Path, password: CharArray, tasks: List<Task>) {
+        val json = Json.encodeToString(tasks)
 
         val secureRandom = SecureRandom()
         val salt = ByteArray(AES_KEY_SIZE / 8).apply { secureRandom.nextBytes(this) }
@@ -53,7 +53,7 @@ class EncryptedIO {
         Files.writeString(filePath, fileContentJson, FILE_CHARSET)
     }
 
-    fun read(filePath: Path, password: CharArray): List<Todo> {
+    fun read(filePath: Path, password: CharArray): List<Task> {
         if (Files.notExists(filePath)) {
             return emptyList()
         }
@@ -72,7 +72,7 @@ class EncryptedIO {
         cipher.updateAAD(Base64.Default.decode(fileContent.tag))
 
         val plaintext = cipher.doFinal(Base64.Default.decode(fileContent.ciphertext))
-        return Json.decodeFromString<List<Todo>>(plaintext.toString(FILE_CHARSET))
+        return Json.decodeFromString<List<Task>>(plaintext.toString(FILE_CHARSET))
     }
 
     private fun getEncryptedPassword(

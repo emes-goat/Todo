@@ -8,20 +8,20 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import java.util.UUID
 
-class TodoView(
+class TaskListCellView(
     private val friendlyDateFormatter: FriendlyDateFormatter,
-    private val completeClicked: (UUID) -> Unit
-) : ListCell<Todo?>() {
+    private val closeClicked: (UUID) -> Unit
+) : ListCell<Task?>() {
     private val layout = HBox().apply {
         alignment = Pos.CENTER_LEFT
     }
-    private val complete = CheckBox().apply {
-        setOnAction { _ -> completeClicked(this@TodoView.id!!) }
+    private val close = CheckBox().apply {
+        setOnAction { _ -> closeClicked(this@TaskListCellView.id!!) }
     }
     private val vbox = VBox().apply {
         padding = insetsOf(DEFAULT_INSET / 2, DEFAULT_INSET / 2, 0, DEFAULT_INSET / 2)
     }
-    private val dueDate = Label().apply {
+    private val due = Label().apply {
         styleClass.addAll("text-small", "text-muted")
     }
     private val title = Label().apply {
@@ -29,21 +29,21 @@ class TodoView(
     private var id: UUID? = null
 
     init {
-        layout.children.addAll(complete, vbox)
-        vbox.children.addAll(dueDate, title)
+        layout.children.addAll(close, vbox)
+        vbox.children.addAll(due, title)
         alignment = Pos.CENTER
     }
 
-    public override fun updateItem(item: Todo?, isEmpty: Boolean) {
+    public override fun updateItem(item: Task?, isEmpty: Boolean) {
         super.updateItem(item, isEmpty)
 
         if (!isEmpty && (item != null)) {
             if (item.isOverdue()) {
-                dueDate.styleClass.add("warning")
+                due.styleClass.add("warning")
                 title.styleClass.add("warning")
             }
-            dueDate.text = friendlyDateFormatter.format(item.dueDate)
-            title.text = item.title
+            due.text = friendlyDateFormatter.format(item.due)
+            title.text = item.content
             id = item.id
 
             graphic = layout

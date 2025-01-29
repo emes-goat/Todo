@@ -1,6 +1,6 @@
 package org.emes.todo.io
 
-import org.emes.todo.Todo
+import org.emes.todo.Task
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -21,9 +21,9 @@ class EncryptedIOTest {
     @Test
     fun writeAndRead() {
         val io = EncryptedIO()
-        val todos = listOf(Todo(UUID.randomUUID(), "Go shopping", LocalDate.now()))
+        val tasks = listOf(Task(UUID.randomUUID(), "Go shopping", LocalDate.now()))
 
-        io.write(FILE_PATH, "pass".toCharArray(), todos)
+        io.write(FILE_PATH, "pass".toCharArray(), tasks)
         val result = io.read(FILE_PATH, "pass".toCharArray())
 
         assertEquals(1, result.size)

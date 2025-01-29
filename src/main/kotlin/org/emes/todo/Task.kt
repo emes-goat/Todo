@@ -7,15 +7,16 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Serializable
-data class Todo(
+data class Task(
     @Serializable(with = UUIDSerializer::class)
     val id: UUID,
-    val title: String,
+    val content: String,
     @Serializable(with = LocalDateSerializer::class)
-    val dueDate: LocalDate
+    val due: LocalDate,
+    val isRecurring: Boolean = false
 ) {
 
     fun isOverdue(): Boolean {
-        return dueDate.isBefore(LocalDate.now())
+        return due.isBefore(LocalDate.now())
     }
 }

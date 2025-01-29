@@ -21,13 +21,15 @@ class HelloApplication : Application() {
             padding = insetsOf(DEFAULT_INSET, DEFAULT_INSET, DEFAULT_INSET, DEFAULT_INSET)
             spacing = 12.0
         }
-        val newTodoView =
-            NewTodoView(formatter) { title, dueDate -> viewModel.save(title, dueDate) }
-        root.children.add(newTodoView)
+        val newTaskView =
+            NewTaskView(DatePickerStringConverter(longDateFormatter)) { title, dueDate ->
+                viewModel.save(title, dueDate)
+            }
+        root.children.add(newTaskView)
 
-        val listView = ListView<Todo>(viewModel.todos)
+        val listView = ListView<Task>(viewModel.tasks)
         listView.cellFactory =
-            Callback { lv -> TodoView(friendlyDateFormatter) { id -> viewModel.complete(id) } }
+            Callback { _ -> TaskListCellView(friendlyDateFormatter) { id -> viewModel.complete(id) } }
         root.children.add(listView)
 
         val scene = Scene(root, 500.0, 400.0)
@@ -37,8 +39,11 @@ class HelloApplication : Application() {
     }
 }
 
-private val formatter = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH)
-private val friendlyDateFormatter = FriendlyDateFormatter(Clock.systemDefaultZone())
+private val defaultLocale = Locale.ENGLISH
+private val longDateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy", defaultLocale)
+
+private val friendlyDateFormatter =
+    FriendlyDateFormatter(Clock.systemDefaultZone(), longDateFormatter, defaultLocale)
 private val viewModel = ViewModel()
 
 fun main() {

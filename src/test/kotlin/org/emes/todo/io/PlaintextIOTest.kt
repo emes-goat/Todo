@@ -1,6 +1,6 @@
 package org.emes.todo.io
 
-import org.emes.todo.Todo
+import org.emes.todo.Task
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -21,9 +21,9 @@ class PlaintextIOTest {
     @Test
     fun writeAndRead() {
         val io = PlaintextIO()
-        val todos = listOf(Todo(UUID.randomUUID(), "Go shopping", LocalDate.now()))
+        val tasks = listOf(Task(UUID.randomUUID(), "Go shopping", LocalDate.now()))
 
-        io.write(FILE_PATH, todos)
+        io.write(FILE_PATH, tasks)
         val result = io.read(FILE_PATH)
 
         assertEquals(1, result.size)

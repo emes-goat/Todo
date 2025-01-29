@@ -11,24 +11,27 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 
 class ViewModel {
-    private val _todos: ObservableList<Todo> = FXCollections.observableArrayList<Todo>()
-    val todos = SortedList(_todos, Comparator<Todo> { a, b -> a.dueDate.compareTo(b.dueDate) })
+    private val _tasks: ObservableList<Task> = FXCollections.observableArrayList<Task>()
+    val tasks = SortedList(_tasks, Comparator<Task> { a, b -> a.due.compareTo(b.due) })
     private val threadPool = Executors.newFixedThreadPool(1)
     private val io = PlaintextIO()
     private val filePath = Paths.get("todos.json")
 
     init {
         CompletableFuture.supplyAsync({ io.read(filePath) }, threadPool)
-            .whenComplete { todos, exception -> _todos.addAll(todos) }
+            .whenComplete { todos, exception ->
+                _tasks.addAll(todos)
+                threadPool.shutdownNow()
+            }
     }
 
     fun save(title: String, dueDate: LocalDate) {
-        _todos.add(Todo(UUID.randomUUID(), title, dueDate))
-        io.write(filePath, _todos.toList())
+        _tasks.add(Task(UUID.randomUUID(), title, dueDate))
+        io.write(filePath, _tasks.toList())
     }
 
     fun complete(id: UUID) {
-        _todos.removeIf { it.id == id }
-        io.write(filePath, _todos.toList())
+        _tasks.removeIf { it.id == id }
+        io.write(filePath, _tasks.toList())
     }
 }
