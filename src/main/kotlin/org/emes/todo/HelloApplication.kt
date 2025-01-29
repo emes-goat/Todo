@@ -7,6 +7,9 @@ import javafx.scene.control.ListView
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import javafx.util.Callback
+import java.time.Clock
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class HelloApplication : Application() {
@@ -14,21 +17,28 @@ class HelloApplication : Application() {
     override fun start(stage: Stage) {
         setUserAgentStylesheet(CupertinoLight().userAgentStylesheet)
 
-        val root = VBox()
-        val newTodoView = NewTodoView { title, dueDate -> viewModel.save(title, dueDate) }
+        val root = VBox().apply {
+            padding = insetsOf(DEFAULT_INSET, DEFAULT_INSET, DEFAULT_INSET, DEFAULT_INSET)
+            spacing = 12.0
+        }
+        val newTodoView =
+            NewTodoView(formatter) { title, dueDate -> viewModel.save(title, dueDate) }
         root.children.add(newTodoView)
 
         val listView = ListView<Todo>(viewModel.todos)
-        listView.cellFactory = Callback { lv -> TodoView { id -> viewModel.complete(id) } }
+        listView.cellFactory =
+            Callback { lv -> TodoView(friendlyDateFormatter) { id -> viewModel.complete(id) } }
         root.children.add(listView)
 
-        val scene = Scene(root, 400.0, 400.0)
-        stage.title = "Hello!"
+        val scene = Scene(root, 500.0, 400.0)
+        stage.title = "Todo"
         stage.scene = scene
         stage.show()
     }
 }
 
+private val formatter = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH)
+private val friendlyDateFormatter = FriendlyDateFormatter(Clock.systemDefaultZone())
 private val viewModel = ViewModel()
 
 fun main() {
