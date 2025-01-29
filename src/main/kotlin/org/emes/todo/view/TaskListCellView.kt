@@ -1,4 +1,4 @@
-package org.emes.todo
+package org.emes.todo.view
 
 import javafx.geometry.Pos
 import javafx.scene.control.CheckBox
@@ -6,12 +6,17 @@ import javafx.scene.control.Label
 import javafx.scene.control.ListCell
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
+import org.emes.todo.DEFAULT_INSET
+import org.emes.todo.view.FriendlyDateFormatter
+import org.emes.todo.Task
+import org.emes.todo.insetsOf
 import java.util.UUID
 
 class TaskListCellView(
     private val friendlyDateFormatter: FriendlyDateFormatter,
     private val closeClicked: (UUID) -> Unit
 ) : ListCell<Task?>() {
+
     private val layout = HBox().apply {
         alignment = Pos.CENTER_LEFT
     }

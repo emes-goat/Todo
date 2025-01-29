@@ -1,4 +1,4 @@
-package org.emes.todo
+package org.emes.todo.view
 
 import javafx.beans.binding.Bindings
 import javafx.event.EventHandler
@@ -7,6 +7,8 @@ import javafx.scene.control.DatePicker
 import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
+import org.emes.todo.DEFAULT_INSET
+import org.emes.todo.insetsOf
 import java.time.LocalDate
 
 class NewTaskView(

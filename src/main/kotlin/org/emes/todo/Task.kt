@@ -13,7 +13,8 @@ data class Task(
     val content: String,
     @Serializable(with = LocalDateSerializer::class)
     val due: LocalDate,
-    val isRecurring: Boolean = false
+    val mode: RecurringMode = RecurringMode.NO_RECURRENCE,
+    val argument: String = ""
 ) {
 
     fun isOverdue(): Boolean {

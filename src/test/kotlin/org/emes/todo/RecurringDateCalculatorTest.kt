@@ -1,27 +1,22 @@
 package org.emes.todo
 
-import org.emes.todo.view.FriendlyDateFormatter
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.time.Clock
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 import java.util.stream.Stream
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class FriendlyDateFormatterTest {
+class RecurringDateCalculatorTest {
 
-    private val fixedInstant = Instant.parse("2025-01-01T00:00:00.000Z")
-    private val formatter = FriendlyDateFormatter(Clock.fixed(fixedInstant, ZoneId.of("UTC")))
+    private val viewModel = ViewModel()
 
     @ParameterizedTest
     @MethodSource("dateProvider")
-    fun testFormatDate(input: LocalDate, expected: String) {
-        val actual = formatter.format(input)
+    fun testTaskCompleting(input: LocalDate, expected: String?) {
+        val actual = viewModel.close(input)
         assertEquals(expected, actual)
     }
 

@@ -1,4 +1,4 @@
-package org.emes.todo
+package org.emes.todo.view
 
 import java.time.Clock
 import java.time.LocalDate

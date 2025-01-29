@@ -1,4 +1,4 @@
-package org.emes.todo
+package org.emes.todo.view
 
 import javafx.util.StringConverter
 import java.time.LocalDate

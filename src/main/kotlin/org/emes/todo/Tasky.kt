@@ -7,12 +7,15 @@ import javafx.scene.control.ListView
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import javafx.util.Callback
+import org.emes.todo.io.PlaintextIO
+import org.emes.todo.view.DatePickerStringConverter
+import org.emes.todo.view.FriendlyDateFormatter
+import org.emes.todo.view.NewTaskView
+import org.emes.todo.view.TaskListCellView
 import java.time.Clock
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 
-class HelloApplication : Application() {
+class Tasky : Application() {
 
     override fun start(stage: Stage) {
         setUserAgentStylesheet(CupertinoLight().userAgentStylesheet)
@@ -22,30 +25,28 @@ class HelloApplication : Application() {
             spacing = 12.0
         }
         val newTaskView =
-            NewTaskView(DatePickerStringConverter(longDateFormatter)) { title, dueDate ->
-                viewModel.save(title, dueDate)
+            NewTaskView(DatePickerStringConverter(DEFAULT_DATE_FORMATTER)) { content, due ->
+                viewModel.save(content, due)
             }
         root.children.add(newTaskView)
 
         val listView = ListView<Task>(viewModel.tasks)
         listView.cellFactory =
-            Callback { _ -> TaskListCellView(friendlyDateFormatter) { id -> viewModel.complete(id) } }
+            Callback { _ -> TaskListCellView(friendlyDateFormatter) { id -> viewModel.close(id) } }
         root.children.add(listView)
 
         val scene = Scene(root, 500.0, 400.0)
-        stage.title = "Todo"
+        stage.title = "Tasky"
         stage.scene = scene
         stage.show()
     }
 }
 
-private val defaultLocale = Locale.ENGLISH
-private val longDateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy", defaultLocale)
-
+private val io = PlaintextIO(FILE_PATH)
 private val friendlyDateFormatter =
-    FriendlyDateFormatter(Clock.systemDefaultZone(), longDateFormatter, defaultLocale)
-private val viewModel = ViewModel()
+    FriendlyDateFormatter(Clock.systemDefaultZone(), DEFAULT_DATE_FORMATTER, DEFAULT_LOCALE)
+private val viewModel = ViewModel(io)
 
 fun main() {
-    Application.launch(HelloApplication::class.java)
+    Application.launch(Tasky::class.java)
 }
